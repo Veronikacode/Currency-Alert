@@ -25,6 +25,7 @@
     </properties>
 
     <modules>
+        <module>common</module>
         <module>data-gatherer</module>
         <module>data-provider</module>
     </modules>
