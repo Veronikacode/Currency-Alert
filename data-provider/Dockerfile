@@ -1,0 +1,21 @@
+# syntax=docker/dockerfile:1
+
+FROM maven:3.9.6-eclipse-temurin-17 AS build
+WORKDIR /workspace
+
+COPY pom.xml ./
+COPY common/pom.xml common/pom.xml
+COPY data-gatherer/pom.xml data-gatherer/pom.xml
+COPY data-provider/pom.xml data-provider/pom.xml
+COPY integration/pom.xml integration/pom.xml
+RUN mvn -pl data-provider -am dependency:go-offline -B
+
+COPY . .
+RUN mvn -pl data-provider -am package -DskipTests -B
+
+FROM eclipse-temurin:17-jre AS runtime
+WORKDIR /app
+COPY --from=build /workspace/data-provider/target/data-provider-*.jar /app/app.jar
+
+EXPOSE 8080
+ENTRYPOINT ["java","-jar","/app/app.jar"]
