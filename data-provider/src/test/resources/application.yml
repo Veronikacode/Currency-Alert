@@ -21,6 +21,9 @@ spring:
     port: 5672
     username: guest
     password: guest
+  mail:
+    host: localhost
+    port: 2525
 app:
   messaging:
     exchange: currency.alerts.exchange
