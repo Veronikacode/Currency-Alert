@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 import pl.coderslab.provider.dto.CurrencyRateMessage;
 import pl.coderslab.provider.entity.CurrencyRate;
 import pl.coderslab.provider.repository.CurrencyRateRepository;
+import java.math.BigDecimal;
+import java.time.ZoneOffset;
 
 @Service
 @RequiredArgsConstructor
@@ -17,8 +19,8 @@ public class CurrencyRateListener {
     public void receiveMessage(CurrencyRateMessage message) {
         CurrencyRate entity = new CurrencyRate();
         entity.setCurrencyCode(message.getCurrencyCode());
-        entity.setRate(message.getRate());
-        entity.setTimestamp(message.getTimestamp());
+        entity.setRate(BigDecimal.valueOf(message.getRate()));
+        entity.setTimestamp(message.getTimestamp().atOffset(ZoneOffset.UTC));
 
         repository.save(entity);
         System.out.println("💾 Saved rate: " + message);
