@@ -22,7 +22,7 @@ public class CurrencyRateListener {
         this.notificationService = notificationService;
     }
 
-    @RabbitListener(queues = "#{currencyAlertQueue.name}")
+    @RabbitListener(queues = "${app.messaging.queue}")
     public void receiveMessage(CurrencyRateChangeMessage message) {
         CurrencyRate saved = currencyRateService.recordRateChange(message);
         notificationService.handleRateChange(saved, message);
