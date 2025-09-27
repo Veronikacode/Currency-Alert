@@ -21,3 +21,12 @@ spring:
     port: 5672
     username: guest
     password: guest
+app:
+  messaging:
+    exchange: currency.alerts.exchange
+    queue: currency.alerts.queue
+    routing-key: currency.alerts.rate-change
+  security:
+    jwt:
+      secret: YWNtZWFybmVkLXNlY3VyZS1rZXktZm9yLWFsYXJtLXdhbHV0LWFwcA==
+      expiration: PT24H
