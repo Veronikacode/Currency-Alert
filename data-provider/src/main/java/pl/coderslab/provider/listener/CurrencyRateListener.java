@@ -1,28 +1,33 @@
 package pl.coderslab.provider.listener;
 
-import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pl.coderslab.provider.dto.CurrencyRateMessage;
-import pl.coderslab.provider.entity.CurrencyRate;
+import pl.coderslab.currencyalert.common.messaging.CurrencyRateChangeMessage;
+import pl.coderslab.provider.service.CurrencyRateService;
 import pl.coderslab.provider.repository.CurrencyRateRepository;
-import java.math.BigDecimal;
-import java.time.ZoneOffset;
 
 @Service
-@RequiredArgsConstructor
 public class CurrencyRateListener {
 
-    private final CurrencyRateRepository repository;
+    private static final Logger log = LoggerFactory.getLogger(CurrencyRateListener.class);
 
-    @RabbitListener(queues = "currency_rates")
-    public void receiveMessage(CurrencyRateMessage message) {
-        CurrencyRate entity = new CurrencyRate();
-        entity.setCurrencyCode(message.getCurrencyCode());
-        entity.setRate(BigDecimal.valueOf(message.getRate()));
-        entity.setTimestamp(message.getTimestamp().atOffset(ZoneOffset.UTC));
+    private final CurrencyRateService currencyRateService;
 
-        repository.save(entity);
-        System.out.println("💾 Saved rate: " + message);
+    @Autowired
+    public CurrencyRateListener(CurrencyRateService currencyRateService) {
+        this.currencyRateService = currencyRateService;
+    }
+
+    public CurrencyRateListener(CurrencyRateRepository repository) {
+        this(new CurrencyRateService(repository));
+    }
+
+    @RabbitListener(queues = "#{currencyAlertQueue.name}")
+    public void receiveMessage(CurrencyRateChangeMessage message) {
+        currencyRateService.recordRateChange(message);
+        log.debug("Stored rate update for {}", message.currency());
     }
 }
