@@ -9,5 +9,7 @@ import java.util.List;
 public interface SubscriptionRepository extends JpaRepository<Subscription, Long> {
     List<Subscription> findByUser(User user);
 
+    List<Subscription> findByUserOrderByCreatedAtDesc(User user);
+
     List<Subscription> findByTargetCurrencyAndActiveTrue(String targetCurrency);
 }
