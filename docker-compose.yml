@@ -1,9 +1,10 @@
 version: "3.8"
+
 services:
-  postgres:
-    image: postgres:15
-    container_name: alarm_postgres
-    restart: always
+  dataprovider-db:
+    image: postgres:16
+    container_name: alarm_dataprovider_db
+    restart: unless-stopped
     environment:
       POSTGRES_DB: alarmdb
       POSTGRES_USER: alarmuser
@@ -11,15 +12,94 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - dataprovider_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U alarmuser -d alarmdb"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  datagatherer-db:
+    image: postgres:16
+    container_name: alarm_datagatherer_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: datagatherer
+      POSTGRES_USER: datagatherer
+      POSTGRES_PASSWORD: datagatherer
+    ports:
+      - "5433:5432"
+    volumes:
+      - datagatherer_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U datagatherer -d datagatherer"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
 
   rabbitmq:
-    image: rabbitmq:3-management
+    image: rabbitmq:3.13-management
     container_name: alarm_rabbitmq
-    restart: always
+    restart: unless-stopped
     ports:
       - "5672:5672"
       - "15672:15672"
 
+  mailhog:
+    image: mailhog/mailhog:v1.0.1
+    container_name: alarm_mailhog
+    restart: unless-stopped
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+
+  data-provider:
+    build:
+      context: .
+      dockerfile: data-provider/Dockerfile
+    container_name: alarm_data_provider
+    restart: unless-stopped
+    depends_on:
+      - dataprovider-db
+      - rabbitmq
+      - mailhog
+    environment:
+      DATAPROVIDER_DB_URL: jdbc:postgresql://dataprovider-db:5432/alarmdb
+      DATAPROVIDER_DB_USERNAME: alarmuser
+      DATAPROVIDER_DB_PASSWORD: alarmpass
+      SPRING_RABBITMQ_HOST: rabbitmq
+      SPRING_RABBITMQ_PORT: 5672
+      SPRING_RABBITMQ_USERNAME: guest
+      SPRING_RABBITMQ_PASSWORD: guest
+      SPRING_MAIL_HOST: mailhog
+      SPRING_MAIL_PORT: 1025
+      SPRING_MAIL_SMTP_AUTH: "false"
+      SPRING_MAIL_SMTP_STARTTLS_ENABLE: "false"
+      APP_SECURITY_JWT_SECRET: YWNtZWFybmVkLXNlY3VyZS1rZXktZm9yLWFsYXJtLXdhbHV0LWFwcA==
+    ports:
+      - "8080:8080"
+
+  data-gatherer:
+    build:
+      context: .
+      dockerfile: data-gatherer/Dockerfile
+    container_name: alarm_data_gatherer
+    restart: unless-stopped
+    depends_on:
+      - datagatherer-db
+      - rabbitmq
+    environment:
+      DATAGATHERER_DB_URL: jdbc:postgresql://datagatherer-db:5432/datagatherer
+      DATAGATHERER_DB_USERNAME: datagatherer
+      DATAGATHERER_DB_PASSWORD: datagatherer
+      SPRING_RABBITMQ_HOST: rabbitmq
+      SPRING_RABBITMQ_PORT: 5672
+      OXR_APP_ID: ${OXR_APP_ID:-demo}
+    ports:
+      - "8081:8080"
+
 volumes:
-  postgres_data:
+  dataprovider_data:
+  datagatherer_data:
