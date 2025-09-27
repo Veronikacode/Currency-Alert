@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<p>Hello,</p>
+
+<p>
+    The exchange rate for <strong th:text="${baseCurrency}"></strong>/<strong th:text="${targetCurrency}"></strong>
+    has moved by <strong th:text="${formattedChangePercent}"></strong>% which meets or exceeds your alert threshold of
+    <span th:text="${threshold}"></span>%.
+</p>
+
+<p>
+    Latest rate: <strong th:text="${rate}"></strong><br/>
+    Snapshot time: <span th:text="${timestamp}"></span>
+    <span th:if="${changePercent != null}"></span>
+</p>
+
+<p>If you no longer wish to receive alerts for this currency pair you can adjust the subscription settings in the application.</p>
+
+<p>Regards,<br/>Currency Alert</p>
+</body>
+</html>
