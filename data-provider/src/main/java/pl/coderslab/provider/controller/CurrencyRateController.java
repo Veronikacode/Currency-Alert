@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pl.coderslab.provider.entity.CurrencyRate;
 import pl.coderslab.provider.repository.CurrencyRateRepository;
+import pl.coderslab.provider.service.CurrencyRateService;
 
 import java.util.List;
 
@@ -14,10 +15,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CurrencyRateController {
 
-    private final CurrencyRateRepository repository;
+    private final CurrencyRateService currencyRateService;
 
     @GetMapping
     public List<CurrencyRate> getAllRates() {
-        return repository.findAll();
+        return currencyRateService.getRecentRates();
     }
 }
