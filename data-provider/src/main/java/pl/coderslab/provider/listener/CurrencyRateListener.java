@@ -3,11 +3,11 @@ package pl.coderslab.provider.listener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.coderslab.currencyalert.common.messaging.CurrencyRateChangeMessage;
+import pl.coderslab.provider.entity.CurrencyRate;
+import pl.coderslab.provider.notification.NotificationService;
 import pl.coderslab.provider.service.CurrencyRateService;
-import pl.coderslab.provider.repository.CurrencyRateRepository;
 
 @Service
 public class CurrencyRateListener {
@@ -15,19 +15,17 @@ public class CurrencyRateListener {
     private static final Logger log = LoggerFactory.getLogger(CurrencyRateListener.class);
 
     private final CurrencyRateService currencyRateService;
+    private final NotificationService notificationService;
 
-    @Autowired
-    public CurrencyRateListener(CurrencyRateService currencyRateService) {
+    public CurrencyRateListener(CurrencyRateService currencyRateService, NotificationService notificationService) {
         this.currencyRateService = currencyRateService;
-    }
-
-    public CurrencyRateListener(CurrencyRateRepository repository) {
-        this(new CurrencyRateService(repository));
+        this.notificationService = notificationService;
     }
 
     @RabbitListener(queues = "#{currencyAlertQueue.name}")
     public void receiveMessage(CurrencyRateChangeMessage message) {
-        currencyRateService.recordRateChange(message);
+        CurrencyRate saved = currencyRateService.recordRateChange(message);
+        notificationService.handleRateChange(saved, message);
         log.debug("Stored rate update for {}", message.currency());
     }
 }

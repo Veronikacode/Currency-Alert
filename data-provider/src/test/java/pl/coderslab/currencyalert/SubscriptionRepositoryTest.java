@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import pl.coderslab.provider.entity.Subscription;
@@ -64,6 +63,14 @@ class SubscriptionRepositoryTest {
                 .first()
                 .extracting(Subscription::getThresholdPercent)
                 .isEqualTo(new BigDecimal("1.250"));
+
+        List<Subscription> pairResults = subscriptionRepository
+                .findByBaseCurrencyAndTargetCurrencyAndActiveTrue("USD", "EUR");
+        assertThat(pairResults)
+                .hasSize(1)
+                .first()
+                .extracting(Subscription::isActive)
+                .isEqualTo(true);
 
         List<Subscription> userSubscriptions = subscriptionRepository.findByUser(user);
         assertThat(userSubscriptions).hasSize(3);
