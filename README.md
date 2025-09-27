@@ -64,7 +64,6 @@ całość można uruchomić lokalnie lub w Dockerze.
 | `data-gatherer/` | Kod mikroserwisu zbierającego dane, konfiguracja i testy. |
 | `data-provider/` | REST API, logika domenowa, notyfikacje oraz testy. |
 | `integration/` | Testy end-to-end z wykorzystaniem Testcontainers. |
-| `docs/` | Dokumentacja uzupełniająca (np. roadmapa). |
 | `docker-compose.yml` | Definicja środowiska (RabbitMQ, bazy, MailHog, serwisy). |
 
 ---
