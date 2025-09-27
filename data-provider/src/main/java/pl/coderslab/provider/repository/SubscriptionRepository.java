@@ -12,4 +12,6 @@ public interface SubscriptionRepository extends JpaRepository<Subscription, Long
     List<Subscription> findByUserOrderByCreatedAtDesc(User user);
 
     List<Subscription> findByTargetCurrencyAndActiveTrue(String targetCurrency);
+
+    List<Subscription> findByBaseCurrencyAndTargetCurrencyAndActiveTrue(String baseCurrency, String targetCurrency);
 }
