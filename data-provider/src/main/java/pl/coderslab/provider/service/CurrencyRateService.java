@@ -9,6 +9,7 @@ import pl.coderslab.provider.repository.CurrencyRateRepository;
 
 import java.time.ZoneOffset;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Encapsulates persistence logic for currency rate snapshots consumed from the messaging pipeline.
@@ -29,7 +30,9 @@ public class CurrencyRateService {
      */
     public CurrencyRate recordRateChange(CurrencyRateChangeMessage message) {
         CurrencyRate entity = new CurrencyRate();
-        entity.setCurrencyCode(message.currency());
+        if (message.currency() != null) {
+            entity.setCurrencyCode(message.currency().toUpperCase(Locale.ENGLISH));
+        }
         entity.setRate(message.newRate());
         entity.setTimestamp(message.timestamp().atOffset(ZoneOffset.UTC));
         return repository.save(entity);
