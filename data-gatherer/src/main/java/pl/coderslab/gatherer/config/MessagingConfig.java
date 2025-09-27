@@ -4,8 +4,6 @@ import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.core.TopicExchange;
-import org.springframework.amqp.rabbit.connection.ConnectionFactory;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,33 +12,27 @@ import org.springframework.context.annotation.Configuration;
 public class MessagingConfig {
 
     @Bean
-    public TopicExchange currencyAlertExchange(MessagingProperties properties) {
+    public TopicExchange gathererCurrencyAlertExchange(MessagingProperties properties) {
         return new TopicExchange(properties.getExchange());
     }
 
     @Bean
-    public Queue currencyAlertQueue(MessagingProperties properties) {
+    public Queue gathererCurrencyAlertQueue(MessagingProperties properties) {
         return new Queue(properties.getQueue(), true);
     }
 
     @Bean
-    public Binding currencyAlertBinding(TopicExchange currencyAlertExchange, Queue currencyAlertQueue,
-                                        MessagingProperties properties) {
-        return BindingBuilder.bind(currencyAlertQueue)
-                .to(currencyAlertExchange)
+    public Binding gathererCurrencyAlertBinding(
+            TopicExchange gathererCurrencyAlertExchange,
+            Queue gathererCurrencyAlertQueue,
+            MessagingProperties properties) {
+        return BindingBuilder.bind(gathererCurrencyAlertQueue)
+                .to(gathererCurrencyAlertExchange)
                 .with(properties.getRoutingKey());
     }
 
     @Bean
-    public Jackson2JsonMessageConverter jackson2JsonMessageConverter() {
+    public Jackson2JsonMessageConverter gathererMessageConverter() {
         return new Jackson2JsonMessageConverter();
-    }
-
-    @Bean
-    public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory,
-                                         Jackson2JsonMessageConverter messageConverter) {
-        RabbitTemplate template = new RabbitTemplate(connectionFactory);
-        template.setMessageConverter(messageConverter);
-        return template;
     }
 }
