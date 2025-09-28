@@ -96,7 +96,8 @@ services:
       DATAGATHERER_DB_PASSWORD: datagatherer
       SPRING_RABBITMQ_HOST: rabbitmq
       SPRING_RABBITMQ_PORT: 5672
-      OXR_APP_ID: ${OXR_APP_ID:-demo}
+      OXR_APP_ID: ${OXR_APP_ID:-9cd7eea4846d4cb196e8b84c2a553f15}
+      APP_SCHEDULING_FETCH_CRON: ${APP_SCHEDULING_FETCH_CRON:-0 0 * * * *}
     ports:
       - "8081:8080"
 
