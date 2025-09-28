@@ -15,7 +15,7 @@ RUN mvn -pl data-provider -am package -DskipTests -B
 
 FROM eclipse-temurin:17-jre AS runtime
 WORKDIR /app
-COPY --from=build /workspace/data-provider/target/data-provider-*.jar /app/app.jar
+COPY --from=build /workspace/data-provider/target/data-provider-*-exec.jar /app/app.jar
 
 EXPOSE 8080
 ENTRYPOINT ["java","-jar","/app/app.jar"]
