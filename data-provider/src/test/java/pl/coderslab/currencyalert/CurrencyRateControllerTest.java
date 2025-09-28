@@ -27,6 +27,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("test")
 class CurrencyRateControllerTest {
 
+    private static final String BASE_CURRENCY = "USD";
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -81,6 +83,7 @@ class CurrencyRateControllerTest {
 
     private void saveRate(String currency, BigDecimal rate, OffsetDateTime timestamp) {
         CurrencyRate entity = new CurrencyRate();
+        entity.setBaseCurrency(BASE_CURRENCY);
         entity.setCurrencyCode(currency);
         entity.setRate(rate);
         entity.setTimestamp(timestamp);
