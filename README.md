@@ -1,6 +1,6 @@
 # Alarm Walutowy
 
-Alarm Walutowy to kompletny, dwuserysowy system monitorowania kursów walut.  
+Alarm Walutowy to kompletny, dwuserwisowy system monitorowania kursów walut.  
 Mikroserwis **DataGatherer** cyklicznie pobiera dane z Open Exchange Rates, 
 wykrywa istotne zmiany i publikuje komunikaty do RabbitMQ.  
 Mikroserwis **DataProvider** konsumuje te komunikaty, utrwala historię kursów, 
