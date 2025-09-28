@@ -81,7 +81,7 @@ całość można uruchomić lokalnie lub w Dockerze.
 
 ```bash
 # zdefiniuj klucz OXR
-export OXR_APP_ID=<twoj_klucz>
+export OXR_APP_ID=9cd7eea4846d4cb196e8b84c2a553f15
 
 # zbuduj i uruchom kompletne środowisko
 docker compose up --build
