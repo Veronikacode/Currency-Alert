@@ -158,6 +158,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
                     <mainClass>pl.coderslab.provider.DataProviderApplication</mainClass>
+                    <classifier>exec</classifier>
                 </configuration>
             </plugin>
             <plugin>
