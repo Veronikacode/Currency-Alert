@@ -130,6 +130,17 @@ Pełne listy właściwości znajdują się w plikach `application.yml` poszczeg�
 
 ---
 
+### Założenia dotyczące waluty bazowej
+
+System zakłada istnienie jednej globalnej waluty bazowej konfigurowanej przez
+`app.exchange-rate.base-currency` (domyślnie `USD`). Wszystkie snapshoty w
+`currency_rates` oraz progi subskrypcji odnoszą się do tej samej wartości.
+Zmiana waluty bazowej w działającym środowisku wymaga wyczyszczenia dotychczas
+zebranych danych (lub ponownego postawienia całego setupu), aby uniknąć
+interpretowania historycznych kursów względem niewłaściwej waluty.
+
+---
+
 ## REST API
 
 ### Uwierzytelnianie
