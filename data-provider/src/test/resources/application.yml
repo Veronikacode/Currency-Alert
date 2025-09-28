@@ -21,6 +21,13 @@ spring:
     port: 5672
     username: guest
     password: guest
+    dynamic: false
+    listener:
+      simple:
+        auto-startup: false
+        missing-queues-fatal: false
+      direct:
+        auto-startup: false
   mail:
     host: localhost
     port: 2525
