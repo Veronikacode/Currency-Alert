@@ -65,6 +65,7 @@ public class CurrencyRateQueryService {
     private CurrencyRateDto toDto(CurrencyRate rate) {
         return new CurrencyRateDto(
                 rate.getId(),
+                rate.getBaseCurrency(),
                 rate.getCurrencyCode(),
                 rate.getRate(),
                 rate.getTimestamp()

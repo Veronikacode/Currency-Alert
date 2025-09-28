@@ -25,8 +25,10 @@ public class NotificationTemplateRenderer {
                                                CurrencyRate rate,
                                                BigDecimal changePercent) {
         BigDecimal formattedChange = changePercent.setScale(2, RoundingMode.HALF_UP);
+        String baseCurrency = rate.getBaseCurrency() != null ? rate.getBaseCurrency() : subscription.getBaseCurrency();
+
         Context context = new Context();
-        context.setVariable("baseCurrency", subscription.getBaseCurrency());
+        context.setVariable("baseCurrency", baseCurrency);
         context.setVariable("targetCurrency", subscription.getTargetCurrency());
         context.setVariable("threshold", subscription.getThresholdPercent());
         context.setVariable("changePercent", changePercent);
@@ -37,7 +39,7 @@ public class NotificationTemplateRenderer {
         String body = templateEngine.process("notification-email", context);
         String subject = String.format(Locale.ENGLISH,
                 "Alert: %s/%s moved by %s%%",
-                subscription.getBaseCurrency(),
+                baseCurrency,
                 subscription.getTargetCurrency(),
                 formattedChange.toPlainString());
         return new NotificationContent(subject, body);

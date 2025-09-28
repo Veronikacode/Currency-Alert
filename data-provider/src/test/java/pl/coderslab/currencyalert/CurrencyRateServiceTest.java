@@ -60,6 +60,7 @@ class CurrencyRateServiceTest {
         verify(repository).save(rateCaptor.capture());
         CurrencyRate persisted = rateCaptor.getValue();
 
+        assertThat(persisted.getBaseCurrency()).isEqualTo("PLN");
         assertThat(persisted.getCurrencyCode()).isEqualTo("USD");
         assertThat(persisted.getRate()).isEqualByComparingTo("4.5678");
         assertThat(persisted.getTimestamp()).isEqualTo(OffsetDateTime.ofInstant(message.timestamp(), ZoneOffset.UTC));

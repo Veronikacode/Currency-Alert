@@ -5,6 +5,7 @@ import java.time.OffsetDateTime;
 
 public record CurrencyRateDto(
         Long id,
+        String baseCurrency,
         String currency,
         BigDecimal rate,
         OffsetDateTime timestamp

@@ -18,12 +18,15 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id")
-@ToString(of = {"id", "currencyCode", "rate", "timestamp"})
+@ToString(of = {"id", "baseCurrency", "currencyCode", "rate", "timestamp"})
 public class CurrencyRate {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "base_currency", length = 3, nullable = false)
+    private String baseCurrency;
 
     @Column(name = "currency_code", length = 3, nullable = false)
     private String currencyCode;
@@ -40,7 +43,8 @@ public class CurrencyRate {
     @OneToMany(mappedBy = "currencyRate", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Notification> notifications = new HashSet<>();
 
-    public CurrencyRate(String currencyCode, BigDecimal rate, OffsetDateTime timestamp) {
+    public CurrencyRate(String baseCurrency, String currencyCode, BigDecimal rate, OffsetDateTime timestamp) {
+        this.baseCurrency = baseCurrency;
         this.currencyCode = currencyCode;
         this.rate = rate;
         this.timestamp = timestamp;

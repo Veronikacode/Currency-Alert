@@ -67,6 +67,7 @@ class NotificationServiceTest {
         subscription.setThresholdPercent(new BigDecimal("1.000"));
 
         rate = new CurrencyRate();
+        rate.setBaseCurrency("USD");
         rate.setCurrencyCode("EUR");
         rate.setRate(new BigDecimal("4.123400"));
         rate.setTimestamp(OffsetDateTime.ofInstant(Instant.parse("2023-10-05T12:30:00Z"), ZoneOffset.UTC));
