@@ -13,14 +13,14 @@ powiadomienia e-mail, gdy próg zmiany kursu zostanie przekroczony.
 
 ```
 ┌───────────────┐      ┌─────────────────┐      ┌────────────────────┐
-│  OpenExchange │ ---> │  DataGatherer   │ ---> │     RabbitMQ        │
+│  OpenExchange │ ---> │  DataGatherer   │ ---> │     RabbitMQ       │
 │    Rates API  │      │  (Scheduler)    │      │ (Exchange & Queue) │
 └───────────────┘      └─────────────────┘      └─────────┬──────────┘
                                                            │
                                                    ┌───────▼────────┐
                                                    │  DataProvider  │
                                                    │ (REST + JPA)   │
-                                                   └───────────────┘
+                                                   └────────────────┘
 ```
 
 Każdy mikroserwis korzysta z własnej bazy PostgreSQL zarządzanej przez Flyway.
@@ -119,7 +119,7 @@ Najważniejsze właściwości można nadpisać zmiennymi środowiskowymi:
 
 | Zmienna | Opis | Domyślna wartość |
 | --- | --- | --- |
-| `OXR_APP_ID` | Klucz Open Exchange Rates | `demo` |
+| `OXR_APP_ID` | Klucz Open Exchange Rates | `9cd7eea4846d4cb196e8b84c2a553f15` |
 | `DATAGATHERER_DB_URL` / `...USERNAME` / `...PASSWORD` | Połączenie z bazą DataGatherer | `jdbc:postgresql://datagatherer-db:5432/datagatherer`, `datagatherer/datapass` |
 | `DATAPROVIDER_DB_URL` / `...USERNAME` / `...PASSWORD` | Połączenie z bazą DataProvider | `jdbc:postgresql://dataprovider-db:5432/alarmdb`, `alarmuser/alarmpass` |
 | `spring.rabbitmq.host` / `port` / `username` / `password` | Połączenie z RabbitMQ | `rabbitmq`, `5672`, `guest/guest` |
