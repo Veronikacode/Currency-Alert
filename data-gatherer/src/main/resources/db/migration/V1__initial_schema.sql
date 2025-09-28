@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS exchange_rate_snapshot (
-                                                      id              BIGSERIAL PRIMARY KEY,
-                                                      currency_code   VARCHAR(3)    NOT NULL,
+    id              BIGSERIAL PRIMARY KEY,
+    currency_code   VARCHAR(3)    NOT NULL,
     rate            NUMERIC(19,6) NOT NULL,
     updated_at      TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP
                                   );
