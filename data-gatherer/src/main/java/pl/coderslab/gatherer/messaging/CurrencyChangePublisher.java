@@ -24,6 +24,6 @@ public class CurrencyChangePublisher {
         rabbitTemplate.convertAndSend(messagingProperties.getExchange(),
                 messagingProperties.getRoutingKey(),
                 message);
-        logger.debug("Published currency change message for {}", message.currency());
+        logger.info("Published currency change message for {}/{}", message.baseCurrency(), message.currency());
     }
 }
