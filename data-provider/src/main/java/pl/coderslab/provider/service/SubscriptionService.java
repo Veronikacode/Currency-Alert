@@ -82,7 +82,12 @@ public class SubscriptionService {
     }
 
     private void ensureOwnership(Subscription subscription, String email) {
-        if (!subscription.getUser().getEmail().equalsIgnoreCase(email)) {
+        Long subscriptionUserId = subscription.getUser().getId();
+        Long loggedInUserId = userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"))
+                .getId();
+
+        if (!subscriptionUserId.equals(loggedInUserId)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Subscription does not belong to user");
         }
     }

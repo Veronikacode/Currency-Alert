@@ -48,9 +48,7 @@ public class CurrencyRateMonitor {
             List<CurrencyRateChangeMessage> changes = changeDetector.detectChanges(latestSnapshot, lastSnapshot,
                     exchangeRateProperties);
             changes.forEach(publisher::publish);
-            if (!changes.isEmpty()) {
-                logger.info("Published {} currency change event(s)", changes.size());
-            } else {
+            if (changes.isEmpty()) {
                 logger.debug("No significant currency changes detected");
             }
             lastSnapshot = latestSnapshot;

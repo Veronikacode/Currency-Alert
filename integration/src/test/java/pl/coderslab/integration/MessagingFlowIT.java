@@ -121,6 +121,7 @@ class MessagingFlowIT {
 
         CurrencyRate persisted = awaitPersistedRate(currencyCode);
 
+        Assertions.assertEquals("USD", persisted.getBaseCurrency());
         Assertions.assertEquals(currencyCode, persisted.getCurrencyCode());
         Assertions.assertEquals(0, new BigDecimal("4.123400").compareTo(persisted.getRate()));
     }

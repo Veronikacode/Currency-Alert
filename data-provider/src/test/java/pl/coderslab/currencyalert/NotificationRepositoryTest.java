@@ -55,6 +55,7 @@ class NotificationRepositoryTest {
         subscription = subscriptionRepository.save(subscription);
 
         CurrencyRate rate = new CurrencyRate();
+        rate.setBaseCurrency("USD");
         rate.setCurrencyCode("CHF");
         rate.setRate(new BigDecimal("4.123400"));
         rate.setTimestamp(OffsetDateTime.now());

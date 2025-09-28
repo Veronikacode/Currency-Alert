@@ -6,6 +6,7 @@ import pl.coderslab.provider.entity.CurrencyRate;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.OffsetDateTime;
+import java.util.Optional;
 
 public interface CurrencyRateRepository extends JpaRepository<CurrencyRate, Long> {
 
@@ -16,4 +17,6 @@ public interface CurrencyRateRepository extends JpaRepository<CurrencyRate, Long
     Page<CurrencyRate> findByCurrencyCodeAndTimestampGreaterThanEqual(String currencyCode, OffsetDateTime from, Pageable pageable);
 
     Page<CurrencyRate> findByCurrencyCodeAndTimestampLessThanEqual(String currencyCode, OffsetDateTime to, Pageable pageable);
+
+    Optional<CurrencyRate> findByCurrencyCode(String currencyCode);
 }

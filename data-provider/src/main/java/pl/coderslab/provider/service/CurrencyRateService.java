@@ -29,12 +29,24 @@ public class CurrencyRateService {
      * @return persisted currency rate entity representing the incoming message
      */
     public CurrencyRate recordRateChange(CurrencyRateChangeMessage message) {
-        CurrencyRate entity = new CurrencyRate();
-        if (message.currency() != null) {
-            entity.setCurrencyCode(message.currency().toUpperCase(Locale.ENGLISH));
+        if (message.baseCurrency() == null || message.baseCurrency().isBlank()) {
+            throw new IllegalArgumentException("Base currency must be provided in rate change message");
         }
+        if (message.currency() == null || message.currency().isBlank()) {
+            throw new IllegalArgumentException("Target currency must be provided in rate change message");
+        }
+
+        String baseCurrency = message.baseCurrency().toUpperCase(Locale.ENGLISH);
+        String currencyCode = message.currency().toUpperCase(Locale.ENGLISH);
+
+        CurrencyRate entity = repository.findByCurrencyCode(currencyCode)
+                .orElseGet(CurrencyRate::new);
+
+        entity.setBaseCurrency(baseCurrency);
+        entity.setCurrencyCode(currencyCode);
         entity.setRate(message.newRate());
         entity.setTimestamp(message.timestamp().atOffset(ZoneOffset.UTC));
+
         return repository.save(entity);
     }
 
