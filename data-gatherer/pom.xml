@@ -103,7 +103,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>pl.coderslab.datagatherer.DataGathererApplication</mainClass>
+                    <mainClass>pl.coderslab.gatherer.DataGathererApplication</mainClass>
                 </configuration>
             </plugin>
         </plugins>
