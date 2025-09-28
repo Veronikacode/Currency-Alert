@@ -5,11 +5,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import pl.coderslab.gatherer.config.ExchangeRateProperties;
-import pl.coderslab.gatherer.config.MessagingProperties;
 
 @SpringBootApplication
 @EnableScheduling
-@EnableConfigurationProperties({ExchangeRateProperties.class, MessagingProperties.class})
+@EnableConfigurationProperties(ExchangeRateProperties.class)
 public class DataGathererApplication {
 
     public static void main(String[] args) {

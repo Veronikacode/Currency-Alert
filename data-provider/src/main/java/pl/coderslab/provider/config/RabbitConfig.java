@@ -7,33 +7,34 @@ import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.amqp.SimpleRabbitListenerContainerFactoryConfigurer;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@EnableConfigurationProperties(MessagingProperties.class)
 public class RabbitConfig {
 
     @Bean
-    public TopicExchange providerCurrencyAlertExchange(MessagingProperties properties) {
-        return new TopicExchange(properties.getExchange());
+    public TopicExchange providerCurrencyAlertExchange(
+            @Value("${app.messaging.exchange:currency.alerts.exchange}") String exchangeName) {
+        return new TopicExchange(exchangeName);
     }
 
     @Bean
-    public Queue providerCurrencyAlertQueue(MessagingProperties properties) {
-        return new Queue(properties.getQueue(), true);
+    public Queue providerCurrencyAlertQueue(
+            @Value("${app.messaging.queue:currency.alerts.queue}") String queueName) {
+        return new Queue(queueName, true);
     }
 
     @Bean
     public Binding providerCurrencyAlertBinding(
             TopicExchange providerCurrencyAlertExchange,
             Queue providerCurrencyAlertQueue,
-            MessagingProperties properties) {
+            @Value("${app.messaging.routing-key:currency.alerts.rate-change}") String routingKey) {
         return BindingBuilder.bind(providerCurrencyAlertQueue)
                 .to(providerCurrencyAlertExchange)
-                .with(properties.getRoutingKey());
+                .with(routingKey);
     }
 
     @Bean
