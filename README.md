@@ -169,6 +169,17 @@ interpretowania historycznych kursów względem niewłaściwej waluty.
 
 W Swagger UI użyj przycisku **Authorize** i wklej token w formacie `Bearer <token>`.
 
+### Pliki HTTP do szybkiego testowania
+- W katalogu `http/` znajduje się plik `data-provider.http` z kompletnymi przykładami zapytań HTTP
+  kompatybilnymi z klientem wbudowanym w IDE JetBrains oraz rozszerzeniem REST Client dla VS Code.
+- Plik definiuje zmienne środowiskowe (`@baseUrl`, `@userEmail`, `@userPassword`) oraz sekwencję żądań
+  obsługujących rejestrację, logowanie, CRUD subskrypcji i odczyt kursów.
+- Po uruchomieniu żądania `register` lub `login` token JWT jest automatycznie zapisywany do zmiennej
+  `authToken`, dzięki czemu kolejne zapytania dodają nagłówek `Authorization` bez dodatkowych działań.
+- Przed uruchomieniem żądań upewnij się, że serwis DataProvider działa pod adresem zdefiniowanym
+  w `@baseUrl` (domyślnie `http://localhost:8080`). W razie potrzeby zmodyfikuj wartości zmiennych
+  na początku pliku.
+  
 ---
 
 ## Powiadomienia e-mail
