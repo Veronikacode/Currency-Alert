@@ -1,0 +1,82 @@
+### Variables
+@baseUrl = http://localhost:8080
+@userEmail = demo.user@example.com
+@userPassword = DemoPass123!
+
+###
+# @name register
+POST {{baseUrl}}/api/auth/register
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "{{userEmail}}",
+  "password": "{{userPassword}}"
+}
+
+> {% client.global.set("authToken", response.body.token); %}
+
+###
+# @name login
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "{{userEmail}}",
+  "password": "{{userPassword}}"
+}
+
+> {% client.global.set("authToken", response.body.token); %}
+
+###
+# @name listSubscriptions
+GET {{baseUrl}}/api/subscriptions
+Accept: application/json
+Authorization: Bearer {{authToken}}
+
+###
+# @name createSubscription
+POST {{baseUrl}}/api/subscriptions
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "baseCurrency": "USD",
+  "targetCurrency": "EUR",
+  "thresholdPercent": 1.5,
+  "active": true
+}
+
+###
+# @name updateSubscription
+PUT {{baseUrl}}/api/subscriptions/{{createSubscription.response.body.id}}
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "id": {{createSubscription.response.body.id}},
+  "baseCurrency": "USD",
+  "targetCurrency": "EUR",
+  "thresholdPercent": 2.0,
+  "active": true
+}
+
+###
+# @name deleteSubscription
+DELETE {{baseUrl}}/api/subscriptions/{{createSubscription.response.body.id}}
+Authorization: Bearer {{authToken}}
+
+###
+# @name latestRates
+GET {{baseUrl}}/api/rates/latest?limit=10
+Accept: application/json
+Authorization: Bearer {{authToken}}
+
+###
+# @name rateHistory
+GET {{baseUrl}}/api/rates/history?currency=EUR&page=0&size=10
+Accept: application/json
+Authorization: Bearer {{authToken}}
